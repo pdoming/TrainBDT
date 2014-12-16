@@ -1,14 +1,28 @@
 #! /bin/bash
 
-NtupleVersion="boostedv-v8"
+NtupleVersion="boostedv-v9"
 
 ScratchDir="/scratch/"$USER
 ls $ScratchDir
-SkimDir="/mnt/hscratch/"$USER"/skims2"
-BDTDir="/mnt/hscratch/"$USER"/TrainBDT"
+SkimDir="/scratch/"$USER/$NtupleVersion"/skims"
+BDTDir="/scratch/"$USER/$NtupleVersion"/WithBDT"
 
 TrainingSamples="trainingFiles.txt"
-VariableNames=("trainingVars.txt" "Vars1.txt" "Vars2.txt")
+#VariableNames=("trainingVars.txt" "Vars1.txt" "Vars2.txt")
+VariableNames=("Vars2.txt")
+
+if [ ! -d /scratch/$USER/$NtupleVersion ]; then
+    mkdir /scratch/$USER/$NtupleVersion
+fi
+if [ ! -d $ScratchDir ]; then
+    mkdir $ScratchDir
+fi
+if [ ! -d $SkimDir ]; then
+    mkdir $SkimDir
+fi
+if [ ! -d $BDTDir ]; then
+    mkdir $BDTDir
+fi
 
 cd /mnt/hscratch/dimatteo/$NtupleVersion/merged
 Samples=(`ls $NtupleVersion*_flatntuple.root`)
@@ -21,43 +35,29 @@ for i0 in `seq 0 1 $((${#Samples[@]}-1))`; do
     fi
 done
 
-if [ ! -d $ScratchDir ]; then
-    mkdir $ScratchDir
-fi
-if [ ! -d $SkimDir ]; then
-    mkdir $SkimDir
-fi
-if [ ! -d $BDTDir ]; then
-    mkdir $BDTDir
-fi
+root -l -q -b skim.C+\(\"$TrainingSamples\",\"$SkimDir\",\"$NtupleVersion\"\)
 
-root -l -q -b skim.C+\(\"$TrainingSamples\",\"$ScratchDir\",\"$NtupleVersion\"\)
+hadd -f $SkimDir/BDT_Signal.root $SkimDir/BDT_Signal_*
+hadd -f $SkimDir/BDT_Background.root $SkimDir/BDT_Back_*
 
-hadd -f $ScratchDir/BDT_Signal.root $ScratchDir/BDT_Signal_*
-hadd -f $ScratchDir/BDT_Background.root $ScratchDir/BDT_Back_*
+root -l -q -b addPT.C+\(\"$SkimDir"/BDT_Signal.root"\"\)
+root -l -q -b addPT.C+\(\"$SkimDir"/BDT_Background.root"\"\)
 
-root -l -q -b addPT.C+\(\"$ScratchDir"/BDT_Signal.root"\"\)
-root -l -q -b addPT.C+\(\"$ScratchDir"/BDT_Background.root"\"\)
-
-cp $ScratchDir/BDT_Signal.root $SkimDir/BDT_Signal.root
-cp $ScratchDir/BDT_Background.root $SkimDir/BDT_Background.root
-
-rm $ScratchDir/BDT_Signal*
-rm $ScratchDir/BDT_Back*
+cd $BDTDir
+files=(`ls $NtupleVersion*`)
+cd -
+for i1 in `seq 0 1 $((${#files[@]}-1))`; do
+    root -l -q -b addPT.C+\(\"$BDTDir/${files[$i1]}\"\)
+done
 
 for i0 in `seq 0 1 $((${#VariableNames[@]}-1))`; do
     root -l -q -b classifyBDT.C+\(\"${VariableNames[$i0]}\",\"$SkimDir"/BDT_Signal.root"\",\"$SkimDir"/BDT_Background.root"\"\)
     cp TMVA/TMVA.root TMVA/TMVA_$i0.root
     cp -r weights weights_$i0
-    cd $BDTDir
-    files=(`ls $NtupleVersion*`)
-    cd -
     for i1 in `seq 0 1 $((${#files[@]}-1))`; do
         echo ${files[$i1]}
-        cp $BDTDir/${files[$i1]} $ScratchDir"/appending.root"
-        root -l -q -b addPT.C+\(\"$ScratchDir"/appending.root"\"\)
-        root -l -q -b applyBDT.C+\(\"$ScratchDir"/appending.root"\"\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
-        root -l -q -b merge1.C+\(\"$ScratchDir"/appending.root"\"\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
-        cp $ScratchDir"/appending.root" $BDTDir/${files[$i1]}
+        root -l -q -b applyBDT.C+\(\"$BDTDir/${files[$i1]}\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
+        root -l -q -b merge1.C+\(\"$BDTDir/${files[$i1]}\"\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
     done
 done
+
