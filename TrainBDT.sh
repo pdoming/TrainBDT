@@ -2,13 +2,25 @@
 
 NtupleVersion="boostedv-v8"
 
-ScratchDir="/home/dabercro/cms/root/TrainBDT/scratch"
+ScratchDir="/scratch/"$USER
+ls $ScratchDir
 SkimDir="/mnt/hscratch/"$USER"/skims2"
 BDTDir="/mnt/hscratch/"$USER"/TrainBDT"
 
 TrainingSamples="trainingFiles.txt"
-VariableNames="trainingVars.txt"
-BDTName="bdt_test"
+#VariableNames=("trainingVars.txt" "Vars1.txt" "Vars2.txt")
+VariableNames=("Vars1.txt" "Vars2.txt")
+
+cd /mnt/hscratch/dimatteo/$NtupleVersion/merged
+Samples=(`ls $NtupleVersion*_flatntuple.root`)
+cd -
+
+for i0 in `seq 0 1 $((${#Samples[@]}-1))`; do
+    if [ ! -f $BDTDir"/"${Samples[$i0]} ]; then
+        echo cp "/mnt/hscratch/dimatteo/$NtupleVersion/merged/"${Samples[$i0]} $BDTDir"/"${Samples[$i0]}
+        cp "/mnt/hscratch/dimatteo/$NtupleVersion/merged/"${Samples[$i0]} $BDTDir"/"${Samples[$i0]}
+    fi
+done
 
 if [ ! -d $ScratchDir ]; then
     mkdir $ScratchDir
@@ -31,23 +43,16 @@ cp $ScratchDir/BDT_Background.root $SkimDir/BDT_Background.root
 rm $ScratchDir/BDT_Signal*
 rm $ScratchDir/BDT_Back*
 
-Samples=(`ls /mnt/hscratch/dimatteo/$NtupleVersion/merged/$NtupleVersion*_flatntuple.root`)
-
-Vars=('2*fjet1QGtagSub2+fjet1QGtagSub1' 'fjet1QGtagSub1' 'fjet1QGtagSub2' 'fjet1QGtag' 'fjet1PullAngle' 'fjet1Pull' 'fjet1MassTrimmed' 'fjet1MassPruned' 'fjet1MassSDbm1' 'fjet1MassSDb2' 'fjet1MassSDb0' 'fjet1QJetVol' 'fjet1C2b2' 'fjet1C2b1' 'fjet1C2b0p5' 'fjet1C2b0p2' 'fjet1C2b0' 'fjet1Tau2' 'fjet1Tau1' 'fjet1Tau2/fjet1Tau1')
-
-for Count1 in `seq 0 1 $((${#Vars[@]}-1))`; do
-    Var=${Vars[$Count1]}
-    echo $Var
-#    cp ../weights_$Var/TMVA* weights/.
-#    root -q -b -l classify1.C+\(\"$Var\"\)
-#    root -q -b -l apply1.C+\(\"../skimmed/background_roc.root\",\"$Var\"\)
-#    root -q -b -l applyAll.C+\(\"../skimmed/background_roc.root\",\"$Var\"\)
-#    root -q -b -l merge1.C+\(\"../skimmed/background_roc.root\",\"$Var\"\)
-#    root -q -b -l applyAll.C+\(\"../scratch/background_word.root\",\"$Var\"\)
-#    root -q -b -l merge1.C+\(\"../scratch/background_word.root\",\"$Var\"\)
-#    root -q -b -l apply1.C+\(\"../skimmed/signal_roc.root\",\"$Var\"\)
-#    root -q -b -l applyAll.C+\(\"../skimmed/signal_roc.root\",\"$Var\"\)
-#    root -q -b -l merge1.C+\(\"../skimmed/signal_roc.root\",\"$Var\"\)
-#    root -q -b -l applyAll.C+\(\"../scratch/signal_word.root\",\"$Var\"\)
-#    root -q -b -l merge1.C+\(\"../scratch/signal_word.root\",\"$Var\"\)
+for i0 in `seq 0 1 $((${#VariableNames[@]}-1))`; do
+    root -l -q -b classifyBDT.C+\(\"${VariableNames[$i0]}\",\"$SkimDir"/BDT_Signal.root"\",\"$SkimDir"/BDT_Background.root"\"\)
+    cd $BDTDir
+    files=(`ls $NtupleVersion*`)
+    cd -
+    for i1 in `seq 0 1 $((${#files[@]}-1))`; do
+        echo ${files[$i1]}
+        cp $BDTDir/${files[$i1]} $ScratchDir"/appending.root"
+        root -l -q -b applyBDT.C+\(\"$ScratchDir"/appending.root"\"\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
+        root -l -q -b merge1.C+\(\"$ScratchDir"/appending.root"\"\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
+        cp $ScratchDir"/appending.root" $BDTDir/${files[$i1]}
+    done
 done

@@ -29,7 +29,7 @@ float topWeight(float pt1,float pt2){
   return TMath::Sqrt(SF(pt1)*SF(pt2));
 }
 
-void skim(TString configFileName = "trainingFiles.txt",TString outDir = "scratch/",TString Version = "boostedv-v9",int SelectionOpt = 0){
+void skim(TString configFileName = "trainingFiles.txt",TString outDir = "scratch",TString Version = "boostedv-v9",int SelectionOpt = 0){
 
   // Default Selection is for MET samples
   // Selection = 1 is the ttbar selection
@@ -71,12 +71,12 @@ void skim(TString configFileName = "trainingFiles.txt",TString outDir = "scratch
     TH1D *totHist = (TH1D*) inFile->FindObjectAny("hDAllEvents");
     float XSweight = xSections[i0]/totHist->GetEntries();
 
-    TString outName = outDir;
+    TString outName = outDir + TString("/");
     if(SigBack[i0] == "Signal"){
-      outName = outName + TString("Signal_");
+      outName = outName + TString("BDT_Signal_");
     }
     else if(SigBack[i0] == "Background"){
-      outName = outName + TString("Back_");
+      outName = outName + TString("BDT_Back_");
     }
     else continue;
     outName = outName + sampleName[i0] + TString(".root");

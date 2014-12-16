@@ -1,1 +1,2 @@
 Background s12-zjets-ptz100-v7a         64.32
+Signal  WH_WToQQ_HToInv_M-115_8TeV_pythia6+Summer12_DR53X-PU_S10_START53_V19-v1+AODSIM   0.6264
