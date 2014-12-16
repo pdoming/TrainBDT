@@ -1,2 +1,10 @@
 Background s12-zjets-ptz100-v7a         64.32
+Background s12-zjets-ptz70-100-v7c     120.00
 Signal  WH_WToQQ_HToInv_M-115_8TeV_pythia6+Summer12_DR53X-PU_S10_START53_V19-v1+AODSIM   0.6264
+Signal  WH_WToQQ_HToInv_M-145_8TeV_pythia6+Summer12DR53X-PU_S10_START53_V19-v1+AODSIM    0.2815
+Signal  WH_WToQQ_HToInv_M-200_8TeV_pythia6+Summer12_DR53X-PU_S10_START53_V19-v1+AODSIM   0.0882
+Signal  WH_WToQQ_HToInv_M-400_8TeV_pythia6+Summer12DR53X-PU_S10_START53_V19-v1+AODSIM    0.0052
+Signal  s12-h115invqq-zh-v19                                                             0.3746
+Signal  s12-h145invqq-zh-v19                                                             0.2279
+Signal  s12-h200invqq-zh-v19                                                             0.0594
+Signal  s12-h400invqq-zh-v19                                                             0.0032

@@ -1,4 +1,4 @@
-bdt_allNewTest
+bdt_all
 2*fjet1QGtagSub2+fjet1QGtagSub1
 fjet1QGtagSub1
 fjet1QGtagSub2

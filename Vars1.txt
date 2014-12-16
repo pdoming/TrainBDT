@@ -1,4 +1,4 @@
-bdt_Option1Test
+bdt_pTOverM
 2*fjet1QGtagSub2+fjet1QGtagSub1
 fjet1QGtagSub1
 fjet1QGtagSub2

@@ -61,7 +61,7 @@ void classifyBDT(TString inputVariables = "trainingVars.txt",
    TCut lSCut   = "abs(fjet1PartonId)==24||abs(fjet1PartonId)==23";
    // lSCut += lEventCut.c_str();
 
-   TCut cleanCut = "fjet1QGtagSub2 > -10 && fjet1PullAngle > -4 && abs(fjet1.Pt()/fjet1MassTrimmed)<200";
+   TCut cleanCut = "fjet1QGtagSub2 > -10 && fjet1PullAngle > -4 && abs(fjet1pt/fjet1MassTrimmed)<200 && abs(fjet1pt/fjet1MassPruned)<200";
 
    TFile *lSAInput = TFile::Open(signalName);
    TTree   *lSASignal    = (TTree*)lSAInput    ->Get("DMSTree"); 
@@ -80,7 +80,7 @@ void classifyBDT(TString inputVariables = "trainingVars.txt",
    std::stringstream pSignal,pBackground;
    pSignal << "nTrain_Signal="<< lSASignal->GetEntries() << ":nTrain_Background=" << lSBSignal->GetEntries();
    // factory->PrepareTrainingAndTestTree( lSCut, lCut,(pSignal.str()+":SplitMode=Block:NormMode=NumEvents:!V").c_str() );
-   factory->PrepareTrainingAndTestTree(lSCut+cleanCut,lCut+cleanCut,"nTrain_Signal=0:nTrain_Background=0:SplitMode=Alternate:NormMode=NumEvents:!V");
+   factory->PrepareTrainingAndTestTree(lSCut&&cleanCut,lCut&&cleanCut,"nTrain_Signal=0:nTrain_Background=0:SplitMode=Alternate:NormMode=NumEvents:!V");
    std::string lName = "alpha_VBF";
    TString lBDTDef   = "!H:!V:NTrees=400:BoostType=Grad:Shrinkage=0.1:UseBaggedGrad=F:nCuts=2000:NNodesMax=10000:MaxDepth=5:UseYesNoLeaf=F:nEventsMin=200";
    factory->BookMethod(TMVA::Types::kBDT,"BDT_simple_alpha",lBDTDef);   
