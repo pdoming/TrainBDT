@@ -8,8 +8,7 @@ SkimDir="/scratch/"$USER/$NtupleVersion"/skims"
 BDTDir="/scratch/"$USER/$NtupleVersion"/WithBDT"
 
 TrainingSamples="trainingFiles.txt"
-#VariableNames=("trainingVars.txt" "Vars1.txt" "Vars2.txt")
-VariableNames=("Vars2.txt")
+VariableNames=("trainingVars.txt" "Vars1.txt" "Vars2.txt")
 
 if [ ! -d /scratch/$USER/$NtupleVersion ]; then
     mkdir /scratch/$USER/$NtupleVersion

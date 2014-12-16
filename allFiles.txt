@@ -1,6 +1,8 @@
 Background s12-qcdht1000-v7a        204.0
 Background s12-qcdht250-500-v7a  276000.0
 Background s12-qcdht500-1000-v7a   8426.0
+Background s12-ttj-sl-v1-v7c        107.66
+Background s12-ttj-fl-v2-v7c         25.81
 Background s12-ttj-v1-v7a           272.6
 Background s12-wjets-1-v7a         6601.5
 Background s12-wjets-2-v7a         2110.3
@@ -14,12 +16,12 @@ Background s12-zgllg-v7a            159.12
 Background s12-zgllgptg130-v7a        0.0478
 Background s12-zgptg130-v7c           0.074
 Background s12-zll-ptz100-v7c        32.9
-Background s12-zll-ptz70-100-v7c     40.00
+Background s12-zll-ptz70-100-v7c     53.9
 Background s12-zz-v7a                 9.0314
 Signal  WH_WToQQ_HToInv_M-125_8TeV_pythia6+Summer12_DR53X-PU_S10_START53_V19-v1+AODSIM   0.4763
 Signal  s12-h125invqq-zh-v19                                                             0.2903
 Background s12-zjets-ptz100-v7a         64.32
-Background s12-zjets-ptz70-100-v7c     120.00
+Background s12-zjets-ptz70-100-v7c      98.70
 Signal  WH_WToQQ_HToInv_M-115_8TeV_pythia6+Summer12_DR53X-PU_S10_START53_V19-v1+AODSIM   0.6264
 Signal  WH_WToQQ_HToInv_M-145_8TeV_pythia6+Summer12DR53X-PU_S10_START53_V19-v1+AODSIM    0.2815
 Signal  WH_WToQQ_HToInv_M-200_8TeV_pythia6+Summer12_DR53X-PU_S10_START53_V19-v1+AODSIM   0.0882
