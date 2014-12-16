@@ -61,7 +61,7 @@ void classifyBDT(TString inputVariables = "trainingVars.txt",
    TCut lSCut   = "abs(fjet1PartonId)==24||abs(fjet1PartonId)==23";
    // lSCut += lEventCut.c_str();
 
-   TCut cleanCut = "fjet1QGtagSub2 > -10 && fjet1PullAngle > -4";
+   TCut cleanCut = "fjet1QGtagSub2 > -10 && fjet1PullAngle > -4 && abs(fjet1.Pt()/fjet1MassTrimmed)<200";
 
    TFile *lSAInput = TFile::Open(signalName);
    TTree   *lSASignal    = (TTree*)lSAInput    ->Get("DMSTree"); 
