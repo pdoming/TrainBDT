@@ -31,6 +31,7 @@ for i0 in `seq 0 1 $((${#Samples[@]}-1))`; do
     if [ ! -f $BDTDir"/"${Samples[$i0]} ]; then
         echo cp "/mnt/hscratch/dimatteo/$NtupleVersion/merged/"${Samples[$i0]} $BDTDir"/"${Samples[$i0]}
         cp "/mnt/hscratch/dimatteo/$NtupleVersion/merged/"${Samples[$i0]} $BDTDir"/"${Samples[$i0]}
+        root -l -q -b addPT.C+\(\"$BDTDir/${files[$i1]}\"\)
     fi
 done
 
@@ -42,21 +43,13 @@ hadd -f $SkimDir/BDT_Background.root $SkimDir/BDT_Back_*
 root -l -q -b addPT.C+\(\"$SkimDir"/BDT_Signal.root"\"\)
 root -l -q -b addPT.C+\(\"$SkimDir"/BDT_Background.root"\"\)
 
-cd $BDTDir
-files=(`ls $NtupleVersion*`)
-cd -
-for i1 in `seq 0 1 $((${#files[@]}-1))`; do
-    root -l -q -b addPT.C+\(\"$BDTDir/${files[$i1]}\"\)
-done
-
 for i0 in `seq 0 1 $((${#VariableNames[@]}-1))`; do
     root -l -q -b classifyBDT.C+\(\"${VariableNames[$i0]}\",\"$SkimDir"/BDT_Signal.root"\",\"$SkimDir"/BDT_Background.root"\"\)
     cp TMVA/TMVA.root TMVA/TMVA_$i0.root
     cp -r weights weights_$i0
-    for i1 in `seq 0 1 $((${#files[@]}-1))`; do
-        echo ${files[$i1]}
-        root -l -q -b applyBDT.C+\(\"$BDTDir/${files[$i1]}\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
-        root -l -q -b merge1.C+\(\"$BDTDir/${files[$i1]}\"\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
+    for i1 in `seq 0 1 $((${#Samples[@]}-1))`; do
+        echo ${Samples[$i1]}
+        root -l -q -b applyBDT.C+\(\"$BDTDir/${Samples[$i1]}\",\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
+        root -l -q -b merge1.C+\(\"$BDTDir/${Samples[$i1]}\"\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
     done
 done
-
