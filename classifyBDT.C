@@ -82,7 +82,7 @@ void classifyBDT(TString inputVariables = "trainingVars.txt",
    // factory->PrepareTrainingAndTestTree( lSCut, lCut,(pSignal.str()+":SplitMode=Block:NormMode=NumEvents:!V").c_str() );
    factory->PrepareTrainingAndTestTree(lSCut&&cleanCut,lCut&&cleanCut,"nTrain_Signal=0:nTrain_Background=0:SplitMode=Alternate:NormMode=NumEvents:!V");
    std::string lName = "alpha_VBF";
-   TString lBDTDef   = "!H:!V:NTrees=400:BoostType=Grad:Shrinkage=0.1:UseBaggedGrad=F:nCuts=2000:NNodesMax=10000:MaxDepth=5:UseYesNoLeaf=F:nEventsMin=200";
+   TString lBDTDef   = "!H:!V:NTrees=400:BoostType=Grad:Shrinkage=0.1:UseBaggedGrad=F:nCuts=2000:MaxDepth=5:UseYesNoLeaf=F:MinNodeSize=0.086:NegWeightTreatment=IgnoreNegWeightsInTraining";
    factory->BookMethod(TMVA::Types::kBDT,"BDT_simple_alpha",lBDTDef);   
    factory->TrainAllMethods();
    factory->TestAllMethods();
