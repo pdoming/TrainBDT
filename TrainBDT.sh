@@ -52,4 +52,8 @@ for i0 in `seq 0 1 $((${#VariableNames[@]}-1))`; do
         root -l -q -b applyBDT.C+\(\"$BDTDir/${Samples[$i1]}\",\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
         root -l -q -b merge1.C+\(\"$BDTDir/${Samples[$i1]}\"\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
     done
+    root -l -q -b applyBDT.C+\(\"$SkimDir/BDT_Signal.root\",\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
+    root -l -q -b merge1.C+\(\"$SkimDir/BDT_Signal.root\"\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
+    root -l -q -b applyBDT.C+\(\"$SkimDir/BDT_Background.root\",\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
+    root -l -q -b merge1.C+\(\"$SkimDir/BDT_Background.root\"\,\"${VariableNames[$i0]}\",\"$ScratchDir"/Output.root"\"\)
 done

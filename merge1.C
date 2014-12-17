@@ -16,7 +16,6 @@ void merge1(std::string iFile0="/scratch/dabercro/BDT_Signal.root",TString varsF
   configFile.open(varsFile.Data());
   TString iName;
   configFile >> iName;  // Is the name of the BDT
-  // cout << " Test : " << iName0 << endl;
 
   float lBDT0 = 0; lTree1->SetBranchAddress(iName,&lBDT0); 
   TBranch* lBranch = lTree1->GetBranch(iName);
