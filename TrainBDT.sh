@@ -1,6 +1,6 @@
 #! /bin/bash
 
-NtupleVersion="boostedv-v9"
+NtupleVersion="boostedv-v8"
 
 ScratchDir="/scratch/"$USER
 ls $ScratchDir
@@ -31,7 +31,7 @@ for i0 in `seq 0 1 $((${#Samples[@]}-1))`; do
     if [ ! -f $BDTDir"/"${Samples[$i0]} ]; then
         echo cp "/mnt/hscratch/dimatteo/$NtupleVersion/merged/"${Samples[$i0]} $BDTDir"/"${Samples[$i0]}
         cp "/mnt/hscratch/dimatteo/$NtupleVersion/merged/"${Samples[$i0]} $BDTDir"/"${Samples[$i0]}
-        root -l -q -b addPT.C+\(\"$BDTDir/${files[$i1]}\"\)
+        root -l -q -b addPT.C+\(\"$BDTDir/${Samples[$i0]}\"\)
     fi
 done
 

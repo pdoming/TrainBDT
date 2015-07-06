@@ -1,0 +1,6 @@
+*.pcm
+*.root
+weights*
+*.d
+*.so
+*~
